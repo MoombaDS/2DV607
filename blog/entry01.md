@@ -1,0 +1,5 @@
+# Introduction
+
+Hey there! I'm Ioseff, or often Joe for short. I'm 26 and hail from the UK, though am currently living and studying in Sweden! I've been in and out of the video games industry for the past six or so years, mostly working as a freelance composer (you can see some of my older work at [rm-audio.com](http://www.rm-audio.com)) and occasionally writer, designer, or editor. These days I take on a more code-oriented role and am currently working on a game with a fellow student. You can take a look at it at [starshardgame.com](http://www.starshardgame.com) if you happen to be interested!
+
+For the most part I work in C# but have strong grounding in Java, C++, and PHP. My aim with this course is to get a better working knowledge of JavaScript and I'll be doing most of my coding in Sublime.
