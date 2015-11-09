@@ -7,7 +7,8 @@ var React = require("react"),
 	ReactDOM = require("react-dom"),
 	Provider = require("react-redux").Provider,
 	store = require("./store"),
-	Counter = require("./components/counter");
+	Counter = require("./components/counter"),
+	TODOList = require("./components/todolist");
 
 var HelloWorld = React.createClass({
 	displayName: "Hello",
@@ -26,6 +27,7 @@ ReactDOM.render(
 		<center>
   			<HelloWorld />
   			<Counter />
+  			<TODOList />
   		</center>
   		</div>
 	</Provider>,

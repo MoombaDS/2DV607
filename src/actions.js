@@ -4,5 +4,8 @@ module.exports = {
 	},
 	decrementCounter: function() {
 		return {type: "DEC_COUNTER"};
+	},
+	addTask: function(name) {
+		return {type: "ADD_TASK", name: name};
 	}
 };

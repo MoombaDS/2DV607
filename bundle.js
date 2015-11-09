@@ -20059,6 +20059,9 @@ module.exports = {
 	},
 	decrementCounter: function () {
 		return { type: "DEC_COUNTER" };
+	},
+	addTask: function (name) {
+		return { type: "ADD_TASK", name: name };
 	}
 };
 
@@ -20069,9 +20072,11 @@ var React = require("react"),
     actions = require("./../actions");
 
 var Counter = React.createClass({
+	displayName: "Counter",
 	propTypes: {
+		decrement: proptypes.func.isRequired,
 		increment: proptypes.func.isRequired,
-		decrement: proptypes.func.isRequired
+		value: proptypes.number.isRequired
 	},
 	render: function () {
 		return React.createElement(
@@ -20102,7 +20107,7 @@ var Counter = React.createClass({
 });
 
 var mapStateToProps = function (state) {
-	return state.counter;
+	return { value: state.counter.value };
 };
 
 var mapDispatchToProps = function (dispatch) {
@@ -20119,6 +20124,70 @@ var mapDispatchToProps = function (dispatch) {
 module.exports = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(Counter);
 
 },{"./../actions":177,"react":166,"react-redux":5}],179:[function(require,module,exports){
+var React = require("react"),
+    ReactRedux = require("react-redux"),
+    proptypes = React.PropTypes,
+    actions = require("./../actions");
+
+var TODOList = React.createClass({
+	displayName: "TODO List",
+	propTypes: {
+		addtask: proptypes.func.isRequired,
+		jobs: proptypes.arrayOf(proptypes.string).isRequired
+	},
+	getInitialState: function () {
+		return { name: "" };
+	},
+	handleSubmit: function (event) {
+		if (event.keyCode == 13) {
+			this.props.addtask(this.state.name);
+			this.setState({ name: "" });
+		}
+	},
+	handleChange: function (event) {
+		this.setState({ name: event.target.value });
+	},
+	render: function () {
+		var list = this.props.jobs.map(function (task, n) {
+			return React.createElement(
+				"li",
+				{ key: n },
+				task
+			);
+		});
+		return React.createElement(
+			"div",
+			null,
+			React.createElement(
+				"h2",
+				null,
+				"TODO List"
+			),
+			React.createElement("input", { type: "text", placeholder: "Enter item", value: this.state.name, onChange: this.handleChange, onKeyDown: this.handleSubmit }),
+			React.createElement(
+				"ul",
+				null,
+				list
+			)
+		);
+	}
+});
+
+var mapStateToProps = function (state) {
+	return { jobs: state.todo.jobs };
+};
+
+var mapDispatchToProps = function (dispatch) {
+	return {
+		addtask: function (name) {
+			dispatch(actions.addTask(name));
+		}
+	};
+};
+
+module.exports = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(TODOList);
+
+},{"./../actions":177,"react":166,"react-redux":5}],180:[function(require,module,exports){
 /*
 This is the entry point for the app! From here we merely import our routes definitions,
 then use React and React-DOM to render it.
@@ -20128,7 +20197,8 @@ var React = require("react"),
     ReactDOM = require("react-dom"),
     Provider = require("react-redux").Provider,
     store = require("./store"),
-    Counter = require("./components/counter");
+    Counter = require("./components/counter"),
+    TODOList = require("./components/todolist");
 
 var HelloWorld = React.createClass({
 	displayName: "Hello",
@@ -20155,22 +20225,26 @@ ReactDOM.render(React.createElement(
 			"center",
 			null,
 			React.createElement(HelloWorld, null),
-			React.createElement(Counter, null)
+			React.createElement(Counter, null),
+			React.createElement(TODOList, null)
 		)
 	)
 ), document.getElementById("root"));
 
-},{"./components/counter":178,"./store":182,"react":166,"react-dom":2,"react-redux":5}],180:[function(require,module,exports){
+},{"./components/counter":178,"./components/todolist":179,"./store":184,"react":166,"react-dom":2,"react-redux":5}],181:[function(require,module,exports){
 module.exports = function () {
 	// Returns a function so it can't be modified accidentally
 	return {
 		counter: {
 			value: 0 // Initial state of the counter
+		},
+		todo: {
+			jobs: ["Sleep"]
 		}
 	};
 };
 
-},{}],181:[function(require,module,exports){
+},{}],182:[function(require,module,exports){
 var initialState = require("./../initialstate");
 
 module.exports = function (state, action) {
@@ -20187,20 +20261,36 @@ module.exports = function (state, action) {
 	}
 };
 
-},{"./../initialstate":180}],182:[function(require,module,exports){
+},{"./../initialstate":181}],183:[function(require,module,exports){
+var initialState = require("./../initialstate");
+
+module.exports = function (state, action) {
+	var newState = Object.assign({}, state); // Copy to a new state so we don't screw up the old one
+	switch (action.type) {
+		case "ADD_TASK":
+			newState.jobs.push(action.name);
+			return newState;
+		default:
+			return state || initialState().todo;
+	}
+};
+
+},{"./../initialstate":181}],184:[function(require,module,exports){
 /*
 Redux Store
 */
 
 var Redux = require("redux"),
     counterReducer = require("./reducers/counterReducer"),
+    todoListReducer = require("./reducers/todolistReducer"),
     initialState = require("./initialstate"),
-    thunk = require('redux-thunk'); // for asynch actions
+    thunk = require("redux-thunk"); // for asynch actions
 
 var rootReducer = Redux.combineReducers({
-	counter: counterReducer });
+	counter: counterReducer, // this means counterReducer will operate on appState.counter
+	todo: todoListReducer
+});
 
-// this means counterReducer will operate on appState.counter
 module.exports = Redux.applyMiddleware(thunk)(Redux.createStore)(rootReducer, initialState());
 
-},{"./initialstate":180,"./reducers/counterReducer":181,"redux":169,"redux-thunk":167}]},{},[179]);
+},{"./initialstate":181,"./reducers/counterReducer":182,"./reducers/todolistReducer":183,"redux":169,"redux-thunk":167}]},{},[180]);

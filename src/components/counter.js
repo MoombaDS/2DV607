@@ -4,9 +4,11 @@ var React = require("react"),
 	actions = require("./../actions");
 
 var Counter = React.createClass({
+	displayName: "Counter",
 	propTypes: {
+		decrement: proptypes.func.isRequired,
 		increment: proptypes.func.isRequired,
-		decrement: proptypes.func.isRequired
+		value: proptypes.number.isRequired
 	},
 	render: function() {
 		return (
@@ -22,7 +24,7 @@ var Counter = React.createClass({
 });
 
 var mapStateToProps = function (state) {
-	return state.counter;
+	return {value: state.counter.value };
 };
 
 var mapDispatchToProps = function (dispatch) {
