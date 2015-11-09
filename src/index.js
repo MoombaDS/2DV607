@@ -4,7 +4,10 @@ then use React and React-DOM to render it.
 */
 
 var React = require("react"),
-	ReactDOM = require("react-dom");
+	ReactDOM = require("react-dom"),
+	Provider = require("react-redux").Provider,
+	store = require("./store"),
+	Counter = require("./components/counter");
 
 var HelloWorld = React.createClass({
 	displayName: "Hello",
@@ -18,6 +21,13 @@ var HelloWorld = React.createClass({
 });
 
 ReactDOM.render(
-  <HelloWorld />,
+	<Provider store={store}>
+		<div>
+		<center>
+  			<HelloWorld />
+  			<Counter />
+  		</center>
+  		</div>
+	</Provider>,
   document.getElementById("root")
 );

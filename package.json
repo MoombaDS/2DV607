@@ -13,7 +13,8 @@
     "react-router": "^1.0.0-rc4",
     "reactify": "=1.1.1",
     "redux": "^3.0.4",
-    "redux-devtools": "^2.1.5"
+    "redux-devtools": "^2.1.5",
+    "redux-thunk": "^1.0.0"
   },
   "scripts": {
     "build": "browserify -t [ babelify --presets [ react ] ] src/index.js -o bundle.js",
