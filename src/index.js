@@ -4,32 +4,19 @@ then use React and React-DOM to render it.
 */
 
 var React = require("react"),
+    ReactRouter = require('react-router'),
+    Router = ReactRouter.Router,
+    Route = ReactRouter.Route,
+    IndexRoute = ReactRouter.IndexRoute,
+    Wrapper = require('./components/wrapper'),
 	ReactDOM = require("react-dom"),
 	Provider = require("react-redux").Provider,
 	store = require("./store"),
-	Counter = require("./components/counter"),
-	TODOList = require("./components/todolist");
-
-var HelloWorld = React.createClass({
-	displayName: "Hello",
-	render: function() {
-		return (
-			<div className="helloWorld">
-				<h1>Hello, world!</h1>
-			</div>
-		);
-	}
-});
+	routes = require('./routes');
 
 ReactDOM.render(
 	<Provider store={store}>
-		<div>
-		<center>
-  			<HelloWorld />
-  			<Counter />
-  			<TODOList />
-  		</center>
-  		</div>
+		<Router routes={routes}/>
 	</Provider>,
   document.getElementById("root")
 );
