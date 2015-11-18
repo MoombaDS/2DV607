@@ -1,15 +1,16 @@
 var React = require("react"),
 	ReactRedux = require("react-redux"),
 	proptypes = React.PropTypes,
-	Button = require("react-bootstrap").Button;
+	Image = require("react-bootstrap").Image;
 
 	var AbilityButton = React.createClass({
 	displayName: "Branch",
+	propTypes: {
+		onClick: proptypes.func.isRequired
+	},
 	render: function() {
 		return (
-			<div>
-				<Button bsStyle="primary" bsSize="large">Button</Button>
-			</div>
+				<Image className="abilityButton" onClick={this.props.onClick} src="./img/test.jpg" rounded />
 		)
 	}
 });

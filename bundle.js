@@ -40421,49 +40421,105 @@ var BuildTester = React.createClass({
 
 module.exports = BuildTester;
 
-},{"./components/Tree":478,"react":463,"react-dom":270,"react-redux":273}],476:[function(require,module,exports){
+},{"./components/Tree":479,"react":463,"react-dom":270,"react-redux":273}],476:[function(require,module,exports){
+module.exports = {
+	spendPoints: function (cost) {
+		return { type: "SPEND_POINTS", cost: cost };
+	},
+	refundPoints: function () {
+		return { type: "REFUND_POINTS" };
+	}
+};
+
+},{}],477:[function(require,module,exports){
 var React = require("react"),
     ReactRedux = require("react-redux"),
     proptypes = React.PropTypes,
-    Button = require("react-bootstrap").Button;
+    Image = require("react-bootstrap").Image;
 
 var AbilityButton = React.createClass({
 	displayName: "Branch",
+	propTypes: {
+		onClick: proptypes.func.isRequired
+	},
 	render: function () {
-		return React.createElement(
-			"div",
-			null,
-			React.createElement(
-				Button,
-				{ bsStyle: "primary", bsSize: "large" },
-				"Button"
-			)
-		);
+		return React.createElement(Image, { className: "abilityButton", onClick: this.props.onClick, src: "./img/test.jpg", rounded: true });
 	}
 });
 
 module.exports = AbilityButton;
 
-},{"react":463,"react-bootstrap":97,"react-redux":273}],477:[function(require,module,exports){
+},{"react":463,"react-bootstrap":97,"react-redux":273}],478:[function(require,module,exports){
 var React = require("react"),
     ReactRedux = require("react-redux"),
     proptypes = React.PropTypes,
-    AbilityButton = require("./AbilityButton");
+    AbilityButton = require("./AbilityButton"),
+    actions = require("./../buildtesteractions"),
+    Label = require("react-bootstrap").Label,
+    Button = require("react-bootstrap").Button;
 
 var Branch = React.createClass({
 	displayName: "Branch",
+	propTypes: {
+		points: proptypes.number.isRequired,
+		spendPoints: proptypes.func.isRequired,
+		refundPoints: proptypes.func.isRequired
+	},
+	handleClick: function () {
+		if (this.props.points >= 2) {
+			this.props.spendPoints(2);
+		}
+	},
 	render: function () {
 		return React.createElement(
 			"div",
 			null,
-			React.createElement(AbilityButton, null)
+			React.createElement(
+				"div",
+				null,
+				React.createElement(
+					Label,
+					null,
+					"Remaining points: ",
+					this.props.points
+				)
+			),
+			React.createElement(
+				"div",
+				null,
+				React.createElement(AbilityButton, { onClick: this.handleClick })
+			),
+			React.createElement(
+				"div",
+				null,
+				React.createElement(
+					Button,
+					{ onClick: this.props.refundPoints },
+					"Refund Points"
+				)
+			)
 		);
 	}
 });
 
-module.exports = Branch;
+var mapStateToProps = function (state) {
+	return { points: state.buildtester.points };
+};
 
-},{"./AbilityButton":476,"react":463,"react-redux":273}],478:[function(require,module,exports){
+var mapDispatchToProps = function (dispatch) {
+	return {
+		spendPoints: function (cost) {
+			dispatch(actions.spendPoints(cost));
+		},
+		refundPoints: function () {
+			dispatch(actions.refundPoints());
+		}
+	};
+};
+
+module.exports = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(Branch);
+
+},{"./../buildtesteractions":476,"./AbilityButton":477,"react":463,"react-bootstrap":97,"react-redux":273}],479:[function(require,module,exports){
 var React = require("react"),
     ReactRedux = require("react-redux"),
     proptypes = React.PropTypes,
@@ -40482,7 +40538,24 @@ var Tree = React.createClass({
 
 module.exports = Tree;
 
-},{"./Branch":477,"react":463,"react-redux":273}],479:[function(require,module,exports){
+},{"./Branch":478,"react":463,"react-redux":273}],480:[function(require,module,exports){
+var initialState = require("./../../initialstate");
+
+module.exports = function (state, action) {
+	var newState = Object.assign({}, state); // Copy to a new state so we don't screw up the old one
+	switch (action.type) {
+		case "SPEND_POINTS":
+			newState.points -= action.cost;
+			return newState;
+		case "REFUND_POINTS":
+			newState.points = 10; // TODO
+			return newState;
+		default:
+			return state || initialState().buildtester;
+	}
+};
+
+},{"./../../initialstate":487}],481:[function(require,module,exports){
 var React = require("react"),
     ReactRedux = require("react-redux"),
     proptypes = React.PropTypes,
@@ -40540,7 +40613,7 @@ var mapDispatchToProps = function (dispatch) {
 
 module.exports = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(Counter);
 
-},{"./../actions":474,"react":463,"react-redux":273}],480:[function(require,module,exports){
+},{"./../actions":474,"react":463,"react-redux":273}],482:[function(require,module,exports){
 var React = require("react");
 
 var HelloWorld = React.createClass({
@@ -40560,7 +40633,7 @@ var HelloWorld = React.createClass({
 
 module.exports = HelloWorld;
 
-},{"react":463}],481:[function(require,module,exports){
+},{"react":463}],483:[function(require,module,exports){
 var React = require("react"),
     LinkContainer = require("react-router-bootstrap").LinkContainer,
     IndexLinkContainer = require("react-router-bootstrap").IndexLinkContainer,
@@ -40621,7 +40694,7 @@ var Navigation = React.createClass({
 
 module.exports = Navigation;
 
-},{"react":463,"react-bootstrap":97,"react-router-bootstrap":282}],482:[function(require,module,exports){
+},{"react":463,"react-bootstrap":97,"react-router-bootstrap":282}],484:[function(require,module,exports){
 var React = require("react"),
     ReactRedux = require("react-redux"),
     proptypes = React.PropTypes,
@@ -40688,7 +40761,7 @@ var mapDispatchToProps = function (dispatch) {
 
 module.exports = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(TODOList);
 
-},{"./../actions":474,"react":463,"react-redux":273}],483:[function(require,module,exports){
+},{"./../actions":474,"react":463,"react-redux":273}],485:[function(require,module,exports){
 var React = require('react'),
     Navigation = require("./navigation"),
     Panel = require("react-bootstrap").Panel,
@@ -40732,7 +40805,7 @@ var Wrapper = React.createClass({
 
 module.exports = Wrapper;
 
-},{"./navigation":481,"react":463,"react-bootstrap":97}],484:[function(require,module,exports){
+},{"./navigation":483,"react":463,"react-bootstrap":97}],486:[function(require,module,exports){
 /*
 This is the entry point for the app! From here we merely import our routes definitions,
 then use React and React-DOM to render it.
@@ -40755,7 +40828,7 @@ ReactDOM.render(React.createElement(
 	React.createElement(Router, { routes: routes })
 ), document.getElementById("root"));
 
-},{"./components/wrapper":483,"./routes":488,"./store":489,"react":463,"react-dom":270,"react-redux":273,"react-router":302}],485:[function(require,module,exports){
+},{"./components/wrapper":485,"./routes":490,"./store":491,"react":463,"react-dom":270,"react-redux":273,"react-router":302}],487:[function(require,module,exports){
 module.exports = function () {
 	// Returns a function so it can't be modified accidentally
 	return {
@@ -40764,11 +40837,14 @@ module.exports = function () {
 		},
 		todo: {
 			jobs: ["Sleep"]
+		},
+		buildtester: {
+			points: 10 // Initial skill points
 		}
 	};
 };
 
-},{}],486:[function(require,module,exports){
+},{}],488:[function(require,module,exports){
 var initialState = require("./../initialstate");
 
 module.exports = function (state, action) {
@@ -40785,7 +40861,7 @@ module.exports = function (state, action) {
 	}
 };
 
-},{"./../initialstate":485}],487:[function(require,module,exports){
+},{"./../initialstate":487}],489:[function(require,module,exports){
 var initialState = require("./../initialstate");
 
 module.exports = function (state, action) {
@@ -40799,7 +40875,7 @@ module.exports = function (state, action) {
 	}
 };
 
-},{"./../initialstate":485}],488:[function(require,module,exports){
+},{"./../initialstate":487}],490:[function(require,module,exports){
 var React = require('react'),
     ReactRouter = require('react-router'),
     Route = ReactRouter.Route,
@@ -40819,7 +40895,7 @@ module.exports = React.createElement(
     React.createElement(Route, { path: '/build', component: BuildTester })
 );
 
-},{"./buildtester/BuildTester":475,"./components/counter":479,"./components/home":480,"./components/todolist":482,"./components/wrapper":483,"react":463,"react-router":302}],489:[function(require,module,exports){
+},{"./buildtester/BuildTester":475,"./components/counter":481,"./components/home":482,"./components/todolist":484,"./components/wrapper":485,"react":463,"react-router":302}],491:[function(require,module,exports){
 /*
 Redux Store
 */
@@ -40827,14 +40903,16 @@ Redux Store
 var Redux = require("redux"),
     counterReducer = require("./reducers/counterReducer"),
     todoListReducer = require("./reducers/todolistReducer"),
+    buildTesterReducer = require("./buildtester/reducers/buildTesterReducer"),
     initialState = require("./initialstate"),
     thunk = require("redux-thunk"); // for asynch actions
 
 var rootReducer = Redux.combineReducers({
 	counter: counterReducer, // this means counterReducer will operate on appState.counter
-	todo: todoListReducer
+	todo: todoListReducer,
+	buildtester: buildTesterReducer
 });
 
 module.exports = Redux.applyMiddleware(thunk)(Redux.createStore)(rootReducer, initialState());
 
-},{"./initialstate":485,"./reducers/counterReducer":486,"./reducers/todolistReducer":487,"redux":466,"redux-thunk":464}]},{},[484]);
+},{"./buildtester/reducers/buildTesterReducer":480,"./initialstate":487,"./reducers/counterReducer":488,"./reducers/todolistReducer":489,"redux":466,"redux-thunk":464}]},{},[486]);
