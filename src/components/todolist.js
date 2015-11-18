@@ -14,8 +14,10 @@ var TODOList = React.createClass({
 	},
 	handleSubmit: function(event) {
 		if (event.keyCode == 13) { // If it's enter key
-			this.props.addtask(this.state.name);
-			this.setState({ name: "" });
+			if (this.state.name) {
+				this.props.addtask(this.state.name);
+				this.setState({ name: "" });
+			}
 		}
 	},
 	handleChange: function(event) {
