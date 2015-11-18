@@ -40565,6 +40565,8 @@ var React = require("react"),
     LinkContainer = require("react-router-bootstrap").LinkContainer,
     IndexLinkContainer = require("react-router-bootstrap").IndexLinkContainer,
     Button = require("react-bootstrap").Button,
+    NavItem = require("react-bootstrap").NavItem,
+    Nav = require("react-bootstrap").Nav,
     ButtonGroup = require("react-bootstrap").ButtonGroup;
 
 var Navigation = React.createClass({
@@ -40574,14 +40576,14 @@ var Navigation = React.createClass({
 			"div",
 			null,
 			React.createElement(
-				ButtonGroup,
-				null,
+				Nav,
+				{ bsStyle: "pills" },
 				React.createElement(
 					IndexLinkContainer,
 					{ to: "/" },
 					React.createElement(
-						Button,
-						{ bsSize: "small" },
+						NavItem,
+						null,
 						"Home"
 					)
 				),
@@ -40589,7 +40591,7 @@ var Navigation = React.createClass({
 					LinkContainer,
 					{ to: "/counter" },
 					React.createElement(
-						Button,
+						NavItem,
 						{ bsSize: "small" },
 						"Counter"
 					)
@@ -40598,7 +40600,7 @@ var Navigation = React.createClass({
 					LinkContainer,
 					{ to: "/todo" },
 					React.createElement(
-						Button,
+						NavItem,
 						{ bsSize: "small" },
 						"TODO List"
 					)
@@ -40607,7 +40609,7 @@ var Navigation = React.createClass({
 					LinkContainer,
 					{ to: "/build" },
 					React.createElement(
-						Button,
+						NavItem,
 						{ bsSize: "small" },
 						"Build Tester"
 					)

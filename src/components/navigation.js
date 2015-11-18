@@ -2,6 +2,8 @@ var React = require("react"),
 	LinkContainer = require("react-router-bootstrap").LinkContainer,
 	IndexLinkContainer = require("react-router-bootstrap").IndexLinkContainer,
 	Button = require("react-bootstrap").Button,
+	NavItem = require("react-bootstrap").NavItem,
+	Nav = require("react-bootstrap").Nav,
 	ButtonGroup = require("react-bootstrap").ButtonGroup;
 
 var Navigation = React.createClass({
@@ -9,12 +11,13 @@ var Navigation = React.createClass({
     render: function() {
         return (
 			<div>
-					<ButtonGroup>
-						<IndexLinkContainer to="/"><Button bsSize="small">Home</Button></IndexLinkContainer>
-						<LinkContainer to="/counter"><Button bsSize="small">Counter</Button></LinkContainer>
-						<LinkContainer to="/todo"><Button bsSize="small">TODO List</Button></LinkContainer>
-						<LinkContainer to="/build"><Button bsSize="small">Build Tester</Button></LinkContainer>
-					</ButtonGroup>
+			<Nav bsStyle="pills">
+						<IndexLinkContainer to="/"><NavItem>Home</NavItem></IndexLinkContainer>
+						<LinkContainer to="/counter"><NavItem bsSize="small">Counter</NavItem></LinkContainer>
+						<LinkContainer to="/todo"><NavItem bsSize="small">TODO List</NavItem></LinkContainer>
+						<LinkContainer to="/build"><NavItem bsSize="small">Build Tester</NavItem></LinkContainer>
+						</Nav>
+
 			</div>
 		);
 	}
