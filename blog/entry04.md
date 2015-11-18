@@ -38,7 +38,7 @@ This seems to work just as effectively as the previous method, though, to me, it
 We're already using plenty of libraries right? So why not throw in another extremely lightweight one which essentially reverts us back to using a method very similar to the first?!
 
 ```javascript
-<LinkContainer to="/home">A link</LinkContainer>
+<LinkContainer to="/home"><NavItem>A link</NavItem></LinkContainer>
 ```
 
 Look familiar? This is exactly what React-Router-Bootstrap (https://github.com/react-bootstrap/react-router-bootstrap) does.
