@@ -1,6 +1,6 @@
 # Different methods of linking with Bootstrap
 
-Recently I made a pull request to the Guild which birthed a short discussion about the different methods for displaying which links are active when using React Router together with Bootstrap. In this post I will attempt to make a short comparison of the three in order to try and decide which might be the better option. I am no expert so all following writings should be taken with a (very large) grain of salt!
+Recently I made a pull request to the Guild which birthed a short discussion about the different methods for displaying which links are active when using React Router together with React-Bootstrap. In this post I will attempt to make a short comparison of the three in order to try and decide which might be the better option. I am no expert so all following writings should be taken with a (very large) grain of salt!
 
 ### Method 1
 
@@ -12,7 +12,7 @@ Normally when working with React Router, we simply make use of the Link (or Inde
 
 As can be seen, this method provides an extremely simple and clean way of handling links (you hardly have to do anything beyond defining routes really!). Why would you want to use a different method at all?
 
-The bad news: This method does not play nicely with Bootstrap.
+The bad news: This method does not play nicely with React-Bootstrap.
 
 Which brings us to...
 
@@ -38,7 +38,7 @@ This seems to work just as effectively as the previous method, though, to me, it
 We're already using plenty of libraries right? So why not throw in another extremely lightweight one which essentially reverts us back to using a method very similar to the first?!
 
 ```javascript
-<LinkContainer to="/home">A link</LinkContainer>
+<LinkContainer to="/home"><NavItem>A link</NavItem></LinkContainer>
 ```
 
 Look familiar? This is exactly what React-Router-Bootstrap (https://github.com/react-bootstrap/react-router-bootstrap) does.
