@@ -7,7 +7,8 @@ module.exports = function() { // Returns a function so it can't be modified acci
 			jobs: ["Sleep"]
 		},
 		buildtester: {
-			points: 10 // Initial skill points
+			points: 10, // Initial skill points
+			army: []
 		}
 	}
 };

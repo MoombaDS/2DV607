@@ -1,6 +1,6 @@
 module.exports = {
-	spendPoints: function(cost) {
-		return {type: "SPEND_POINTS", cost : cost};
+	spendPoints: function(unit) {
+		return {type: "SPEND_POINTS", unit: unit};
 	},
 	refundPoints: function() {
 		return {type: "REFUND_POINTS"};

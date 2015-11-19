@@ -1,0 +1,8 @@
+{
+	"name": "Evoker",
+	"cost": 3,
+	"icon": "evoker.jpg",
+	"tooltip": "Test tooltip that is a bit longer than originally planned",
+	"category": "Evoker",
+	"tier": 1
+}

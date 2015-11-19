@@ -5,4 +5,52 @@
 
 .abilityButton {
 	cursor: pointer;
+	margin: 5px;
+}
+
+.tooltip {
+	background-color: #000;
+	text-alight: left;
+	color: #FFF;
+}
+
+.tooltip>.popover-title {
+	background-color: #000;
+	color: #FFF;
+	border-bottom: 0px;
+}
+
+.popover.left .arrow:after {
+	border-left-color: #000;
+}
+
+.row {
+
+}
+
+.tree-row {
+	
+}
+
+.category-row {
+
+}
+
+.tier-row {
+	min-height: 92px;
+	border-bottom: 1px solid;
+	border-top: 1px solid;
+	border-color: #000;
+}
+
+.army-row {
+	min-height: 90px;
+}
+
+.top-row {
+	padding-bottom: 20px;
+}
+
+.bottom-row {
+	padding-top: 20px;
 }

@@ -40421,10 +40421,10 @@ var BuildTester = React.createClass({
 
 module.exports = BuildTester;
 
-},{"./components/Tree":479,"react":463,"react-dom":270,"react-redux":273}],476:[function(require,module,exports){
+},{"./components/Tree":478,"react":463,"react-dom":270,"react-redux":273}],476:[function(require,module,exports){
 module.exports = {
-	spendPoints: function (cost) {
-		return { type: "SPEND_POINTS", cost: cost };
+	spendPoints: function (unit) {
+		return { type: "SPEND_POINTS", unit: unit };
 	},
 	refundPoints: function () {
 		return { type: "REFUND_POINTS" };
@@ -40435,67 +40435,149 @@ module.exports = {
 var React = require("react"),
     ReactRedux = require("react-redux"),
     proptypes = React.PropTypes,
-    Image = require("react-bootstrap").Image;
-
-var AbilityButton = React.createClass({
-	displayName: "Branch",
-	propTypes: {
-		onClick: proptypes.func.isRequired
-	},
-	render: function () {
-		return React.createElement(Image, { className: "abilityButton", onClick: this.props.onClick, src: "./img/test.jpg", rounded: true });
-	}
-});
-
-module.exports = AbilityButton;
-
-},{"react":463,"react-bootstrap":97,"react-redux":273}],478:[function(require,module,exports){
-var React = require("react"),
-    ReactRedux = require("react-redux"),
-    proptypes = React.PropTypes,
-    AbilityButton = require("./AbilityButton"),
-    actions = require("./../buildtesteractions"),
-    Label = require("react-bootstrap").Label,
-    Button = require("react-bootstrap").Button;
+    UnitButton = require("./UnitButton"),
+    units = require("./../data/units"),
+    Row = require("react-bootstrap").Row;
 
 var Branch = React.createClass({
 	displayName: "Branch",
 	propTypes: {
-		points: proptypes.number.isRequired,
-		spendPoints: proptypes.func.isRequired,
-		refundPoints: proptypes.func.isRequired
-	},
-	handleClick: function () {
-		if (this.props.points >= 2) {
-			this.props.spendPoints(2);
-		}
+		onClick: proptypes.func.isRequired,
+		category: proptypes.string.isRequired
 	},
 	render: function () {
+
+		var buttons = [];
+
+		units.forEach((function (unit, id) {
+			if (unit.category === this.props.category) {
+				buttons.push(React.createElement(UnitButton, { key: id, unit: unit, onClick: this.props.onClick }));
+			}
+		}).bind(this));
+
 		return React.createElement(
 			"div",
 			null,
 			React.createElement(
-				"div",
-				null,
+				Row,
+				{ className: "tier-row" },
+				buttons
+			),
+			React.createElement(
+				Row,
+				{ className: "category-row" },
+				this.props.category
+			)
+		);
+	}
+});
+
+module.exports = Branch;
+
+},{"./../data/units":480,"./UnitButton":479,"react":463,"react-bootstrap":97,"react-redux":273}],478:[function(require,module,exports){
+var React = require("react"),
+    ReactRedux = require("react-redux"),
+    proptypes = React.PropTypes,
+    actions = require("./../buildtesteractions"),
+    Label = require("react-bootstrap").Label,
+    Button = require("react-bootstrap").Button,
+    UnitButton = require("./UnitButton"),
+    Branch = require("./Branch"),
+    Grid = require("react-bootstrap").Grid,
+    Row = require("react-bootstrap").Row,
+    Col = require("react-bootstrap").Col;
+
+var Tree = React.createClass({
+	displayName: "Tree",
+	propTypes: {
+		points: proptypes.number.isRequired,
+		army: proptypes.array.isRequired,
+		spendPoints: proptypes.func.isRequired,
+		refundPoints: proptypes.func.isRequired
+	},
+	handleClick: function (unit) {
+		if (this.props.points >= unit.cost) {
+			this.props.spendPoints(unit);
+		}
+	},
+	render: function () {
+		var displayArmy = [];
+
+		this.props.army.forEach((function (unit, id) {
+			displayArmy.push(React.createElement(UnitButton, { key: id, unit: unit }));
+		}).bind(this));
+
+		return React.createElement(
+			Grid,
+			{ fluid: true },
+			React.createElement(
+				Row,
+				{ className: "top-row" },
 				React.createElement(
-					Label,
-					null,
-					"Remaining points: ",
-					this.props.points
+					Col,
+					{ xs: 18, md: 12 },
+					React.createElement(
+						Row,
+						{ className: "army-row" },
+						displayArmy
+					),
+					React.createElement(
+						Row,
+						null,
+						React.createElement(
+							Label,
+							null,
+							"Remaining points: ",
+							this.props.points
+						)
+					)
 				)
 			),
 			React.createElement(
-				"div",
-				null,
-				React.createElement(AbilityButton, { onClick: this.handleClick })
+				Row,
+				{ className: "tree-row" },
+				React.createElement(
+					Col,
+					{ xs: 3, md: 2 },
+					React.createElement(Branch, { category: "Enforcer", onClick: this.handleClick })
+				),
+				React.createElement(
+					Col,
+					{ xs: 3, md: 2 },
+					React.createElement(Branch, { category: "Guardian", onClick: this.handleClick })
+				),
+				React.createElement(
+					Col,
+					{ xs: 3, md: 2 },
+					React.createElement(Branch, { category: "Wanderer", onClick: this.handleClick })
+				),
+				React.createElement(
+					Col,
+					{ xs: 3, md: 2 },
+					React.createElement(Branch, { category: "Foodpad", onClick: this.handleClick })
+				),
+				React.createElement(
+					Col,
+					{ xs: 3, md: 2 },
+					React.createElement(Branch, { category: "Evoker", onClick: this.handleClick })
+				),
+				React.createElement(
+					Col,
+					{ xs: 3, md: 2 },
+					React.createElement(Branch, { category: "Invoker", onClick: this.handleClick })
+				)
 			),
 			React.createElement(
-				"div",
-				null,
+				Row,
+				{ className: "bottom-row" },
 				React.createElement(
-					Button,
-					{ onClick: this.props.refundPoints },
-					"Refund Points"
+					Col,
+					{ xs: 18, md: 12 },
+					React.createElement(
+						Button,
+						{ onClick: this.props.refundPoints },
+						"Refund Points"
+					)
 				)
 			)
 		);
@@ -40503,13 +40585,13 @@ var Branch = React.createClass({
 });
 
 var mapStateToProps = function (state) {
-	return { points: state.buildtester.points };
+	return { points: state.buildtester.points, army: state.buildtester.army };
 };
 
 var mapDispatchToProps = function (dispatch) {
 	return {
-		spendPoints: function (cost) {
-			dispatch(actions.spendPoints(cost));
+		spendPoints: function (unit) {
+			dispatch(actions.spendPoints(unit));
 		},
 		refundPoints: function () {
 			dispatch(actions.refundPoints());
@@ -40517,45 +40599,93 @@ var mapDispatchToProps = function (dispatch) {
 	};
 };
 
-module.exports = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(Branch);
+module.exports = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(Tree);
 
-},{"./../buildtesteractions":476,"./AbilityButton":477,"react":463,"react-bootstrap":97,"react-redux":273}],479:[function(require,module,exports){
+},{"./../buildtesteractions":476,"./Branch":477,"./UnitButton":479,"react":463,"react-bootstrap":97,"react-redux":273}],479:[function(require,module,exports){
 var React = require("react"),
     ReactRedux = require("react-redux"),
     proptypes = React.PropTypes,
-    Branch = require("./Branch");
+    Image = require("react-bootstrap").Image,
+    OverlayTrigger = require("react-bootstrap").OverlayTrigger,
+    Popover = require("react-bootstrap").Popover;
 
-var Tree = React.createClass({
-	displayName: "Tree",
+var UnitButton = React.createClass({
+	displayName: "Branch",
+	propTypes: {
+		unit: proptypes.object.isRequired
+	},
 	render: function () {
+		var tooltip = React.createElement(
+			Popover,
+			{ className: "tooltip", title: React.createElement(
+					"strong",
+					null,
+					this.props.unit.name
+				), id: this.props.unit.name },
+			React.createElement(
+				"p",
+				null,
+				this.props.unit.tooltip
+			),
+			React.createElement(
+				"p",
+				null,
+				"Cost: ",
+				this.props.unit.cost
+			)
+		);
+
 		return React.createElement(
-			"div",
-			null,
-			React.createElement(Branch, null)
+			OverlayTrigger,
+			{ placement: "left", overlay: tooltip },
+			React.createElement(Image, { className: "abilityButton", onClick: this.props.onClick && this.props.onClick.bind(null, this.props.unit), src: "./img/" + this.props.unit.icon, rounded: true })
 		);
 	}
 });
 
-module.exports = Tree;
+module.exports = UnitButton;
 
-},{"./Branch":478,"react":463,"react-redux":273}],480:[function(require,module,exports){
+},{"react":463,"react-bootstrap":97,"react-redux":273}],480:[function(require,module,exports){
+var units = [require("./units/Guardian.json"), require("./units/Evoker.json")];
+
+module.exports = units;
+
+},{"./units/Evoker.json":481,"./units/Guardian.json":482}],481:[function(require,module,exports){
+module.exports={
+	"name": "Evoker",
+	"cost": 3,
+	"icon": "evoker.jpg",
+	"tooltip": "Test tooltip that is a bit longer than originally planned",
+	"category": "Evoker",
+	"tier": 1
+}
+},{}],482:[function(require,module,exports){
+module.exports={
+	"name": "Guardian",
+	"cost": 2,
+	"icon": "guardian.jpg",
+	"tooltip": "Test tooltip that is a bit longer than originally planned",
+	"category": "Guardian",
+	"tier": 1
+}
+},{}],483:[function(require,module,exports){
 var initialState = require("./../../initialstate");
 
 module.exports = function (state, action) {
 	var newState = Object.assign({}, state); // Copy to a new state so we don't screw up the old one
 	switch (action.type) {
 		case "SPEND_POINTS":
-			newState.points -= action.cost;
+			newState.points -= action.unit.cost;
+			newState.army.push(action.unit);
 			return newState;
 		case "REFUND_POINTS":
-			newState.points = 10; // TODO
-			return newState;
+			return initialState().buildtester;
 		default:
 			return state || initialState().buildtester;
 	}
 };
 
-},{"./../../initialstate":487}],481:[function(require,module,exports){
+},{"./../../initialstate":490}],484:[function(require,module,exports){
 var React = require("react"),
     ReactRedux = require("react-redux"),
     proptypes = React.PropTypes,
@@ -40613,7 +40743,7 @@ var mapDispatchToProps = function (dispatch) {
 
 module.exports = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(Counter);
 
-},{"./../actions":474,"react":463,"react-redux":273}],482:[function(require,module,exports){
+},{"./../actions":474,"react":463,"react-redux":273}],485:[function(require,module,exports){
 var React = require("react");
 
 var HelloWorld = React.createClass({
@@ -40633,7 +40763,7 @@ var HelloWorld = React.createClass({
 
 module.exports = HelloWorld;
 
-},{"react":463}],483:[function(require,module,exports){
+},{"react":463}],486:[function(require,module,exports){
 var React = require("react"),
     LinkContainer = require("react-router-bootstrap").LinkContainer,
     IndexLinkContainer = require("react-router-bootstrap").IndexLinkContainer,
@@ -40694,7 +40824,7 @@ var Navigation = React.createClass({
 
 module.exports = Navigation;
 
-},{"react":463,"react-bootstrap":97,"react-router-bootstrap":282}],484:[function(require,module,exports){
+},{"react":463,"react-bootstrap":97,"react-router-bootstrap":282}],487:[function(require,module,exports){
 var React = require("react"),
     ReactRedux = require("react-redux"),
     proptypes = React.PropTypes,
@@ -40761,7 +40891,7 @@ var mapDispatchToProps = function (dispatch) {
 
 module.exports = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(TODOList);
 
-},{"./../actions":474,"react":463,"react-redux":273}],485:[function(require,module,exports){
+},{"./../actions":474,"react":463,"react-redux":273}],488:[function(require,module,exports){
 var React = require('react'),
     Navigation = require("./navigation"),
     Panel = require("react-bootstrap").Panel,
@@ -40805,7 +40935,7 @@ var Wrapper = React.createClass({
 
 module.exports = Wrapper;
 
-},{"./navigation":483,"react":463,"react-bootstrap":97}],486:[function(require,module,exports){
+},{"./navigation":486,"react":463,"react-bootstrap":97}],489:[function(require,module,exports){
 /*
 This is the entry point for the app! From here we merely import our routes definitions,
 then use React and React-DOM to render it.
@@ -40828,7 +40958,7 @@ ReactDOM.render(React.createElement(
 	React.createElement(Router, { routes: routes })
 ), document.getElementById("root"));
 
-},{"./components/wrapper":485,"./routes":490,"./store":491,"react":463,"react-dom":270,"react-redux":273,"react-router":302}],487:[function(require,module,exports){
+},{"./components/wrapper":488,"./routes":493,"./store":494,"react":463,"react-dom":270,"react-redux":273,"react-router":302}],490:[function(require,module,exports){
 module.exports = function () {
 	// Returns a function so it can't be modified accidentally
 	return {
@@ -40839,12 +40969,13 @@ module.exports = function () {
 			jobs: ["Sleep"]
 		},
 		buildtester: {
-			points: 10 // Initial skill points
+			points: 10, // Initial skill points
+			army: []
 		}
 	};
 };
 
-},{}],488:[function(require,module,exports){
+},{}],491:[function(require,module,exports){
 var initialState = require("./../initialstate");
 
 module.exports = function (state, action) {
@@ -40861,7 +40992,7 @@ module.exports = function (state, action) {
 	}
 };
 
-},{"./../initialstate":487}],489:[function(require,module,exports){
+},{"./../initialstate":490}],492:[function(require,module,exports){
 var initialState = require("./../initialstate");
 
 module.exports = function (state, action) {
@@ -40875,7 +41006,7 @@ module.exports = function (state, action) {
 	}
 };
 
-},{"./../initialstate":487}],490:[function(require,module,exports){
+},{"./../initialstate":490}],493:[function(require,module,exports){
 var React = require('react'),
     ReactRouter = require('react-router'),
     Route = ReactRouter.Route,
@@ -40895,7 +41026,7 @@ module.exports = React.createElement(
     React.createElement(Route, { path: '/build', component: BuildTester })
 );
 
-},{"./buildtester/BuildTester":475,"./components/counter":481,"./components/home":482,"./components/todolist":484,"./components/wrapper":485,"react":463,"react-router":302}],491:[function(require,module,exports){
+},{"./buildtester/BuildTester":475,"./components/counter":484,"./components/home":485,"./components/todolist":487,"./components/wrapper":488,"react":463,"react-router":302}],494:[function(require,module,exports){
 /*
 Redux Store
 */
@@ -40915,4 +41046,4 @@ var rootReducer = Redux.combineReducers({
 
 module.exports = Redux.applyMiddleware(thunk)(Redux.createStore)(rootReducer, initialState());
 
-},{"./buildtester/reducers/buildTesterReducer":480,"./initialstate":487,"./reducers/counterReducer":488,"./reducers/todolistReducer":489,"redux":466,"redux-thunk":464}]},{},[486]);
+},{"./buildtester/reducers/buildTesterReducer":483,"./initialstate":490,"./reducers/counterReducer":491,"./reducers/todolistReducer":492,"redux":466,"redux-thunk":464}]},{},[489]);
