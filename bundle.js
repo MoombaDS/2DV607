@@ -40428,6 +40428,9 @@ module.exports = {
 	},
 	refundPoints: function () {
 		return { type: "REFUND_POINTS" };
+	},
+	removeUnit: function (id) {
+		return { type: "REMOVE_UNIT", id: id };
 	}
 };
 
@@ -40447,11 +40450,26 @@ var Branch = React.createClass({
 	},
 	render: function () {
 
-		var buttons = [];
+		var tier1 = [];
+		var tier2 = [];
+		var tier3 = [];
 
 		units.forEach((function (unit, id) {
 			if (unit.category === this.props.category) {
-				buttons.push(React.createElement(UnitButton, { key: id, unit: unit, onClick: this.props.onClick }));
+				switch (unit.tier) {
+					case 1:
+						tier1.push(React.createElement(UnitButton, { key: id, unit: unit, onClick: this.props.onClick }));
+						break;
+					case 2:
+						tier2.push(React.createElement(UnitButton, { key: id, unit: unit, onClick: this.props.onClick }));
+						break;
+					case 3:
+						tier3.push(React.createElement(UnitButton, { key: id, unit: unit, onClick: this.props.onClick }));
+						break;
+					default:
+						console.log("Incorrect tier supplied: " + unit.name);
+						break;
+				}
 			}
 		}).bind(this));
 
@@ -40460,8 +40478,18 @@ var Branch = React.createClass({
 			null,
 			React.createElement(
 				Row,
-				{ className: "tier-row" },
-				buttons
+				{ className: "tier3-row" },
+				tier3
+			),
+			React.createElement(
+				Row,
+				{ className: "tier2-row" },
+				tier2
+			),
+			React.createElement(
+				Row,
+				{ className: "tier1-row" },
+				tier1
 			),
 			React.createElement(
 				Row,
@@ -40493,7 +40521,8 @@ var Tree = React.createClass({
 		points: proptypes.number.isRequired,
 		army: proptypes.array.isRequired,
 		spendPoints: proptypes.func.isRequired,
-		refundPoints: proptypes.func.isRequired
+		refundPoints: proptypes.func.isRequired,
+		removeUnit: proptypes.func.isRequired
 	},
 	handleClick: function (unit) {
 		if (this.props.points >= unit.cost) {
@@ -40504,7 +40533,7 @@ var Tree = React.createClass({
 		var displayArmy = [];
 
 		this.props.army.forEach((function (unit, id) {
-			displayArmy.push(React.createElement(UnitButton, { key: id, unit: unit }));
+			displayArmy.push(React.createElement(UnitButton, { onRemove: this.props.removeUnit.bind(null, id), key: id, unit: unit }));
 		}).bind(this));
 
 		return React.createElement(
@@ -40538,32 +40567,32 @@ var Tree = React.createClass({
 				{ className: "tree-row" },
 				React.createElement(
 					Col,
-					{ xs: 3, md: 2 },
+					{ className: "enforcer-col", xs: 3, md: 2 },
 					React.createElement(Branch, { category: "Enforcer", onClick: this.handleClick })
 				),
 				React.createElement(
 					Col,
-					{ xs: 3, md: 2 },
+					{ className: "guardian-col", xs: 3, md: 2 },
 					React.createElement(Branch, { category: "Guardian", onClick: this.handleClick })
 				),
 				React.createElement(
 					Col,
-					{ xs: 3, md: 2 },
+					{ className: "wanderer-col", xs: 3, md: 2 },
 					React.createElement(Branch, { category: "Wanderer", onClick: this.handleClick })
 				),
 				React.createElement(
 					Col,
-					{ xs: 3, md: 2 },
-					React.createElement(Branch, { category: "Foodpad", onClick: this.handleClick })
+					{ className: "footpad-col", xs: 3, md: 2 },
+					React.createElement(Branch, { category: "Footpad", onClick: this.handleClick })
 				),
 				React.createElement(
 					Col,
-					{ xs: 3, md: 2 },
+					{ className: "evoker-col", xs: 3, md: 2 },
 					React.createElement(Branch, { category: "Evoker", onClick: this.handleClick })
 				),
 				React.createElement(
 					Col,
-					{ xs: 3, md: 2 },
+					{ className: "invoker-col", xs: 3, md: 2 },
 					React.createElement(Branch, { category: "Invoker", onClick: this.handleClick })
 				)
 			),
@@ -40595,6 +40624,9 @@ var mapDispatchToProps = function (dispatch) {
 		},
 		refundPoints: function () {
 			dispatch(actions.refundPoints());
+		},
+		removeUnit: function (id) {
+			dispatch(actions.removeUnit(id));
 		}
 	};
 };
@@ -40607,7 +40639,8 @@ var React = require("react"),
     proptypes = React.PropTypes,
     Image = require("react-bootstrap").Image,
     OverlayTrigger = require("react-bootstrap").OverlayTrigger,
-    Popover = require("react-bootstrap").Popover;
+    Popover = require("react-bootstrap").Popover,
+    Button = require("react-bootstrap").Button;
 
 var UnitButton = React.createClass({
 	displayName: "Branch",
@@ -40636,9 +40669,22 @@ var UnitButton = React.createClass({
 		);
 
 		return React.createElement(
-			OverlayTrigger,
-			{ placement: "left", overlay: tooltip },
-			React.createElement(Image, { className: "abilityButton", onClick: this.props.onClick && this.props.onClick.bind(null, this.props.unit), src: "./img/" + this.props.unit.icon, rounded: true })
+			"span",
+			null,
+			React.createElement(
+				OverlayTrigger,
+				{ placement: "left", overlay: tooltip },
+				React.createElement(Image, { className: "abilityButton", onClick: this.props.onClick && this.props.onClick.bind(null, this.props.unit), src: "./img/" + this.props.unit.icon, rounded: true })
+			),
+			(() => {
+				if (this.props.onRemove) {
+					return React.createElement(
+						Button,
+						{ bsSize: "xsmall", onClick: this.props.onRemove, className: "remove-button" },
+						"×"
+					);
+				}
+			})()
 		);
 	}
 });
@@ -40646,11 +40692,20 @@ var UnitButton = React.createClass({
 module.exports = UnitButton;
 
 },{"react":463,"react-bootstrap":97,"react-redux":273}],480:[function(require,module,exports){
-var units = [require("./units/Guardian.json"), require("./units/Evoker.json")];
+var units = [require("./units/Enforcer.json"), require("./units/Guardian.json"), require("./units/Guardian2.json"), require("./units/Guardian3.json"), require("./units/Guardian4.json"), require("./units/Guardian5.json"), require("./units/Wanderer.json"), require("./units/Footpad.json"), require("./units/Evoker.json"), require("./units/Invoker.json")];
 
 module.exports = units;
 
-},{"./units/Evoker.json":481,"./units/Guardian.json":482}],481:[function(require,module,exports){
+},{"./units/Enforcer.json":481,"./units/Evoker.json":482,"./units/Footpad.json":483,"./units/Guardian.json":484,"./units/Guardian2.json":485,"./units/Guardian3.json":486,"./units/Guardian4.json":487,"./units/Guardian5.json":488,"./units/Invoker.json":489,"./units/Wanderer.json":490}],481:[function(require,module,exports){
+module.exports={
+	"name": "Enforcer",
+	"cost": 2,
+	"icon": "enforcer.jpg",
+	"tooltip": "Test tooltip that is a bit longer than originally planned",
+	"category": "Enforcer",
+	"tier": 1
+}
+},{}],482:[function(require,module,exports){
 module.exports={
 	"name": "Evoker",
 	"cost": 3,
@@ -40659,7 +40714,16 @@ module.exports={
 	"category": "Evoker",
 	"tier": 1
 }
-},{}],482:[function(require,module,exports){
+},{}],483:[function(require,module,exports){
+module.exports={
+	"name": "Footpad",
+	"cost": 2,
+	"icon": "footpad.jpg",
+	"tooltip": "Test tooltip that is a bit longer than originally planned",
+	"category": "Footpad",
+	"tier": 1
+}
+},{}],484:[function(require,module,exports){
 module.exports={
 	"name": "Guardian",
 	"cost": 2,
@@ -40668,7 +40732,61 @@ module.exports={
 	"category": "Guardian",
 	"tier": 1
 }
-},{}],483:[function(require,module,exports){
+},{}],485:[function(require,module,exports){
+module.exports={
+	"name": "Guardian2",
+	"cost": 2,
+	"icon": "guardian.jpg",
+	"tooltip": "Test tooltip that is a bit longer than originally planned",
+	"category": "Guardian",
+	"tier": 2
+}
+},{}],486:[function(require,module,exports){
+module.exports={
+	"name": "Guardian3",
+	"cost": 2,
+	"icon": "guardian.jpg",
+	"tooltip": "Test tooltip that is a bit longer than originally planned",
+	"category": "Guardian",
+	"tier": 2
+}
+},{}],487:[function(require,module,exports){
+module.exports={
+	"name": "Guardian4",
+	"cost": 2,
+	"icon": "guardian.jpg",
+	"tooltip": "Test tooltip that is a bit longer than originally planned",
+	"category": "Guardian",
+	"tier": 2
+}
+},{}],488:[function(require,module,exports){
+module.exports={
+	"name": "Guardian5",
+	"cost": 2,
+	"icon": "guardian.jpg",
+	"tooltip": "Test tooltip that is a bit longer than originally planned",
+	"category": "Guardian",
+	"tier": 2
+}
+},{}],489:[function(require,module,exports){
+module.exports={
+	"name": "Invoker",
+	"cost": 2,
+	"icon": "invoker.jpg",
+	"tooltip": "Test tooltip that is a bit longer than originally planned",
+	"category": "Invoker",
+	"tier": 1
+}
+},{}],490:[function(require,module,exports){
+module.exports={
+	"name": "Wanderer",
+	"cost": 2,
+	"icon": "wanderer.jpg",
+	"tooltip": "Test tooltip that is a bit longer than originally planned",
+	"category": "Wanderer",
+	"tier": 1
+}
+},{}],491:[function(require,module,exports){
 var initialState = require("./../../initialstate");
 
 module.exports = function (state, action) {
@@ -40680,12 +40798,16 @@ module.exports = function (state, action) {
 			return newState;
 		case "REFUND_POINTS":
 			return initialState().buildtester;
+		case "REMOVE_UNIT":
+			newState.points += newState.army[action.id].cost;
+			newState.army.splice(action.id, 1);
+			return newState;
 		default:
 			return state || initialState().buildtester;
 	}
 };
 
-},{"./../../initialstate":490}],484:[function(require,module,exports){
+},{"./../../initialstate":498}],492:[function(require,module,exports){
 var React = require("react"),
     ReactRedux = require("react-redux"),
     proptypes = React.PropTypes,
@@ -40743,7 +40865,7 @@ var mapDispatchToProps = function (dispatch) {
 
 module.exports = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(Counter);
 
-},{"./../actions":474,"react":463,"react-redux":273}],485:[function(require,module,exports){
+},{"./../actions":474,"react":463,"react-redux":273}],493:[function(require,module,exports){
 var React = require("react");
 
 var HelloWorld = React.createClass({
@@ -40763,7 +40885,7 @@ var HelloWorld = React.createClass({
 
 module.exports = HelloWorld;
 
-},{"react":463}],486:[function(require,module,exports){
+},{"react":463}],494:[function(require,module,exports){
 var React = require("react"),
     LinkContainer = require("react-router-bootstrap").LinkContainer,
     IndexLinkContainer = require("react-router-bootstrap").IndexLinkContainer,
@@ -40824,7 +40946,7 @@ var Navigation = React.createClass({
 
 module.exports = Navigation;
 
-},{"react":463,"react-bootstrap":97,"react-router-bootstrap":282}],487:[function(require,module,exports){
+},{"react":463,"react-bootstrap":97,"react-router-bootstrap":282}],495:[function(require,module,exports){
 var React = require("react"),
     ReactRedux = require("react-redux"),
     proptypes = React.PropTypes,
@@ -40891,7 +41013,7 @@ var mapDispatchToProps = function (dispatch) {
 
 module.exports = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(TODOList);
 
-},{"./../actions":474,"react":463,"react-redux":273}],488:[function(require,module,exports){
+},{"./../actions":474,"react":463,"react-redux":273}],496:[function(require,module,exports){
 var React = require('react'),
     Navigation = require("./navigation"),
     Panel = require("react-bootstrap").Panel,
@@ -40935,7 +41057,7 @@ var Wrapper = React.createClass({
 
 module.exports = Wrapper;
 
-},{"./navigation":486,"react":463,"react-bootstrap":97}],489:[function(require,module,exports){
+},{"./navigation":494,"react":463,"react-bootstrap":97}],497:[function(require,module,exports){
 /*
 This is the entry point for the app! From here we merely import our routes definitions,
 then use React and React-DOM to render it.
@@ -40958,7 +41080,7 @@ ReactDOM.render(React.createElement(
 	React.createElement(Router, { routes: routes })
 ), document.getElementById("root"));
 
-},{"./components/wrapper":488,"./routes":493,"./store":494,"react":463,"react-dom":270,"react-redux":273,"react-router":302}],490:[function(require,module,exports){
+},{"./components/wrapper":496,"./routes":501,"./store":502,"react":463,"react-dom":270,"react-redux":273,"react-router":302}],498:[function(require,module,exports){
 module.exports = function () {
 	// Returns a function so it can't be modified accidentally
 	return {
@@ -40969,13 +41091,13 @@ module.exports = function () {
 			jobs: ["Sleep"]
 		},
 		buildtester: {
-			points: 10, // Initial skill points
+			points: 40, // Initial skill points
 			army: []
 		}
 	};
 };
 
-},{}],491:[function(require,module,exports){
+},{}],499:[function(require,module,exports){
 var initialState = require("./../initialstate");
 
 module.exports = function (state, action) {
@@ -40992,7 +41114,7 @@ module.exports = function (state, action) {
 	}
 };
 
-},{"./../initialstate":490}],492:[function(require,module,exports){
+},{"./../initialstate":498}],500:[function(require,module,exports){
 var initialState = require("./../initialstate");
 
 module.exports = function (state, action) {
@@ -41006,7 +41128,7 @@ module.exports = function (state, action) {
 	}
 };
 
-},{"./../initialstate":490}],493:[function(require,module,exports){
+},{"./../initialstate":498}],501:[function(require,module,exports){
 var React = require('react'),
     ReactRouter = require('react-router'),
     Route = ReactRouter.Route,
@@ -41026,7 +41148,7 @@ module.exports = React.createElement(
     React.createElement(Route, { path: '/build', component: BuildTester })
 );
 
-},{"./buildtester/BuildTester":475,"./components/counter":484,"./components/home":485,"./components/todolist":487,"./components/wrapper":488,"react":463,"react-router":302}],494:[function(require,module,exports){
+},{"./buildtester/BuildTester":475,"./components/counter":492,"./components/home":493,"./components/todolist":495,"./components/wrapper":496,"react":463,"react-router":302}],502:[function(require,module,exports){
 /*
 Redux Store
 */
@@ -41046,4 +41168,4 @@ var rootReducer = Redux.combineReducers({
 
 module.exports = Redux.applyMiddleware(thunk)(Redux.createStore)(rootReducer, initialState());
 
-},{"./buildtester/reducers/buildTesterReducer":483,"./initialstate":490,"./reducers/counterReducer":491,"./reducers/todolistReducer":492,"redux":466,"redux-thunk":464}]},{},[489]);
+},{"./buildtester/reducers/buildTesterReducer":491,"./initialstate":498,"./reducers/counterReducer":499,"./reducers/todolistReducer":500,"redux":466,"redux-thunk":464}]},{},[497]);

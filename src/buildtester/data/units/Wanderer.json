@@ -1,0 +1,8 @@
+{
+	"name": "Wanderer",
+	"cost": 2,
+	"icon": "wanderer.jpg",
+	"tooltip": "Test tooltip that is a bit longer than originally planned",
+	"category": "Wanderer",
+	"tier": 1
+}

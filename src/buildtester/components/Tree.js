@@ -16,7 +16,8 @@ var Tree = React.createClass({
 		points: proptypes.number.isRequired,
 		army: proptypes.array.isRequired,
 		spendPoints: proptypes.func.isRequired,
-		refundPoints: proptypes.func.isRequired
+		refundPoints: proptypes.func.isRequired,
+		removeUnit: proptypes.func.isRequired
 	},
 	handleClick: function(unit) {
 		if (this.props.points >= unit.cost) {
@@ -27,7 +28,7 @@ var Tree = React.createClass({
 		var displayArmy = [];
 
 		this.props.army.forEach(function(unit, id) {
-			displayArmy.push(<UnitButton key={id} unit={unit} />);
+			displayArmy.push(<UnitButton onRemove={this.props.removeUnit.bind(null, id)} key={id} unit={unit} />);
 		}.bind(this));
 
 		return (
@@ -43,22 +44,22 @@ var Tree = React.createClass({
 					</Col>
 				</Row>
 				<Row className="tree-row">
-					<Col xs={3} md={2}>
+					<Col className="enforcer-col" xs={3} md={2}>
 						<Branch category="Enforcer" onClick={this.handleClick}/>
 					</Col>
-					<Col xs={3} md={2}>
+					<Col className="guardian-col" xs={3} md={2}>
 						<Branch category="Guardian" onClick={this.handleClick}/>
 					</Col>
-					<Col xs={3} md={2}>
+					<Col className="wanderer-col" xs={3} md={2}>
 						<Branch category="Wanderer" onClick={this.handleClick}/>
 					</Col>
-					<Col xs={3} md={2}>
-						<Branch category="Foodpad" onClick={this.handleClick}/>
+					<Col className="footpad-col" xs={3} md={2}>
+						<Branch category="Footpad" onClick={this.handleClick}/>
 					</Col>
-					<Col xs={3} md={2}>
+					<Col className="evoker-col" xs={3} md={2}>
 						<Branch category="Evoker" onClick={this.handleClick}/>
 					</Col>
-					<Col xs={3} md={2}>
+					<Col className="invoker-col" xs={3} md={2}>
 						<Branch category="Invoker" onClick={this.handleClick}/>
 					</Col>
 				</Row>
@@ -83,6 +84,9 @@ var mapDispatchToProps = function (dispatch) {
 		},
 		refundPoints: function() {
 			dispatch(actions.refundPoints());
+		},
+		removeUnit: function(id) {
+			dispatch(actions.removeUnit(id));
 		}
 	}
 };

@@ -3,7 +3,8 @@ var React = require("react"),
 	proptypes = React.PropTypes,
 	Image = require("react-bootstrap").Image,
 	OverlayTrigger = require("react-bootstrap").OverlayTrigger,
-	Popover = require("react-bootstrap").Popover;
+	Popover = require("react-bootstrap").Popover,
+	Button = require("react-bootstrap").Button;
 
 	var UnitButton = React.createClass({
 	displayName: "Branch",
@@ -23,9 +24,16 @@ var React = require("react"),
 		);
 
 		return (
-			<OverlayTrigger placement="left" overlay={tooltip}>
-				<Image className="abilityButton" onClick={this.props.onClick && this.props.onClick.bind(null, this.props.unit)} src={"./img/"+ this.props.unit.icon} rounded />
-			</OverlayTrigger>
+			<span>
+				<OverlayTrigger placement="left" overlay={tooltip}>
+					<Image className="abilityButton" onClick={this.props.onClick && this.props.onClick.bind(null, this.props.unit)} src={"./img/"+ this.props.unit.icon} rounded />
+				</OverlayTrigger>
+				{(() => {
+					if (this.props.onRemove) {
+						return (<Button bsSize="xsmall" onClick={this.props.onRemove} className="remove-button">&times;</Button>);
+					}
+				})()}
+			</span>
 		)
 	}
 });

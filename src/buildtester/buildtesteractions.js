@@ -4,5 +4,8 @@ module.exports = {
 	},
 	refundPoints: function() {
 		return {type: "REFUND_POINTS"};
+	},
+	removeUnit: function(id) {
+		return {type: "REMOVE_UNIT", id: id}
 	}
 };

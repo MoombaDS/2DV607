@@ -6,11 +6,12 @@
 .abilityButton {
 	cursor: pointer;
 	margin: 5px;
+	width: 50px;
 }
 
 .tooltip {
 	background-color: #000;
-	text-alight: left;
+	text-align: left;
 	color: #FFF;
 }
 
@@ -33,14 +34,52 @@
 }
 
 .category-row {
-
+	padding: 10px;
 }
 
-.tier-row {
+.tier1-row {
 	min-height: 92px;
 	border-bottom: 1px solid;
-	border-top: 1px solid;
 	border-color: #000;
+	padding-top: 30px;
+}
+
+.tier2-row {
+	min-height: 152px;
+	border-bottom: 1px solid;
+	border-color: #000;
+	padding-top: 30px;
+}
+
+.tier3-row {
+	min-height: 92px;
+	border-bottom: 1px solid;
+	border-color: #000;
+	padding-top: 30px;
+}
+
+.enforcer-col {
+	background-color: #f39d9b;
+}
+
+.guardian-col {
+	background-color: #f7cd9d;
+}
+
+.wanderer-col {
+	background-color: #fff5a4;
+}
+
+.footpad-col {
+	background-color: #db9e87;
+}
+
+.evoker-col {
+	background-color: #aef0f2;
+}
+
+.invoker-col {
+	background-color: #97a5a6;
 }
 
 .army-row {
@@ -49,8 +88,23 @@
 
 .top-row {
 	padding-bottom: 20px;
+	border-bottom: 1px solid;
+	border-color: #000;
 }
 
 .bottom-row {
 	padding-top: 20px;
+}
+
+.remove-button {
+	position: absolute;
+	color: white;
+	margin-left: -52px;
+	margin-top: 7px;
+	background-color: transparent;
+	border: none;
+}
+
+.remove-button:hover {
+	color: red;
 }

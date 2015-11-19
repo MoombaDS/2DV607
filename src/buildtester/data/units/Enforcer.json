@@ -1,0 +1,8 @@
+{
+	"name": "Enforcer",
+	"cost": 2,
+	"icon": "enforcer.jpg",
+	"tooltip": "Test tooltip that is a bit longer than originally planned",
+	"category": "Enforcer",
+	"tier": 1
+}

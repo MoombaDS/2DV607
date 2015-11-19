@@ -9,6 +9,10 @@ module.exports = function (state, action) {
 			return newState;
 		case "REFUND_POINTS":
 			return initialState().buildtester;
+		case "REMOVE_UNIT":
+			newState.points += newState.army[action.id].cost;
+			newState.army.splice(action.id, 1);
+			return newState;
 		default:
 			return state || initialState().buildtester;
 	}

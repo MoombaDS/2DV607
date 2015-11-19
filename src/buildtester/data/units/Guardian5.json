@@ -1,0 +1,8 @@
+{
+	"name": "Guardian5",
+	"cost": 2,
+	"icon": "guardian.jpg",
+	"tooltip": "Test tooltip that is a bit longer than originally planned",
+	"category": "Guardian",
+	"tier": 2
+}
