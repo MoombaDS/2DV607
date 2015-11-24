@@ -8,6 +8,8 @@ I'd like to mention a few details about some of the implementation and my plans 
 
 In order to give a bit more weight to the whole application and make it feel a bit like you could actually be interacting with another individual, I make use of the `Redux Thunk` asynch dispatches to delay the dispatch of certain messages by NPCs and the system. 
 
+### TODO
+
 Right now there are several things on my immediate TODO list (not counting other goals further down the line). Firstly is persistence between sessions. Since this won't be a multiplayer game, Firebase would probably be rather overkill when it comes to storing the data. Instead, I plan to persist the data to local storage. I had originally planned to do this by way of a small library by the name of `redux-localstorage` but David has since convinced me to attempt to do this without relying on an external library as it should be pretty easy to write a JSON string of the current state to local storage.
 
 At this point, world generation is the big tasks I'm attempting to conquer, with multiple possible approaches available to me. Right now I'm mostly leaning towards representing the world as a 2D array which would be a tile map of sorts. The player's current position within the world would be stored as X and Y coordinates, with the options for the player to move in any of the four cardinal directions at any given time. Certain tiles would be marked as blocked during generation, preventing the player from progressing in that direction, and events (most likely represented in JSON files) would be plugged into certain slots and activated when the player reaches them.
