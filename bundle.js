@@ -40938,6 +40938,11 @@ var Navigation = React.createClass({
 						{ bsSize: "small" },
 						"Build Tester"
 					)
+				),
+				React.createElement(
+					NavItem,
+					{ href: "http://moombads.github.io/quest/", target: "_blank" },
+					"Project - Quest"
 				)
 			)
 		);

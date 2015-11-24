@@ -16,6 +16,7 @@ var Navigation = React.createClass({
 						<LinkContainer to="/counter"><NavItem bsSize="small">Counter</NavItem></LinkContainer>
 						<LinkContainer to="/todo"><NavItem bsSize="small">TODO List</NavItem></LinkContainer>
 						<LinkContainer to="/build"><NavItem bsSize="small">Build Tester</NavItem></LinkContainer>
+						<NavItem href="http://moombads.github.io/quest/" target="_blank">Project - Quest</NavItem>
 						</Nav>
 
 			</div>
