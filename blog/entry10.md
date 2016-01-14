@@ -1,0 +1,9 @@
+# Conclusion
+
+It seems I didn't mention very much in terms of learning objectives in my introduction. I came into this course with next to no knowledge in JavaScript and never having touched React or Redux. Now I leave with what I hope is at least a somewhat good understanding of the language and frameworks. There is still much I have yet to figure out in the field of functional programming, and much room for me to grow as a programmer, but I feel like this course has done more to set me on the path to becoming a useful programmer than many of the others I have taken to date.
+
+I intend to continue working on my project slowly over time. It was never a project I envisioned completing within the timeframe of the course due to its scale and my designs for it. It has been a great experience to make pull requests on the projects of other students and to receive pull requests in turn - I hope that I have been able to help people in similar ways to those that have helped me!
+
+As a communication channel, Slack seems to work far better than the moodle forums most other courses use (that see no activity whatsoever). There are always people around to give quick feedback or advice, and it's a pretty nice way to engage with other students from the course (of which I have done basically none in my two years studying prior to this course!)
+
+Ultimately, this has probably been my favourite course at the university and has definitely put JavaScript very high on my list of favourite languages to work in! I have already begun work on some external projects which I hope to launch in the near future!
